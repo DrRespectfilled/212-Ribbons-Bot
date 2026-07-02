@@ -4,7 +4,7 @@ from discord import app_commands
 from discord.ext import tasks
 import sqlite3
 
-TOKEN = "MTUyMjA0MzY5MzM4MzgxMTEzMg.GdnyK7.C7wRg-Q6B1B8Ubw3hMUJimRfR18bGZJIk9Y0-E"
+TOKEN = "YOUR_TOKEN_HERE"
 
 
 
