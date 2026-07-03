@@ -96,8 +96,6 @@ RIBBONS = {
 
 # ---------------- COMMANDS ----------------
 
-    await ctx.send(embed=embed)
-
 @bot.tree.command(
     name="help",
     description="Shows all available bot commands"
