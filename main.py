@@ -96,14 +96,6 @@ RIBBONS = {
 
 # ---------------- COMMANDS ----------------
 
-@bot.command(name="fuckthe606")
-async def secret_message(ctx):
-
-    embed = discord.Embed(
-        title="Classified Message",
-        description="⚠️ Access Granted\n\nFuck you Warchief, burn in Hell."
-    )
-
     await ctx.send(embed=embed)
 
 @bot.tree.command(
