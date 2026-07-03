@@ -365,34 +365,41 @@ async def stack(interaction: discord.Interaction, member: discord.Member):
     await interaction.response.send_message(embed=embed)
 
 
-@bot.tree.command(name="lookup_ribbon", description="Find users with ribbon")
-async def lookup_ribbon(interaction: discord.Interaction, ribbon: str):
-    users = get_ribbon_users(ribbon)
+@bot.tree.command(
+    name="search_earned_ribbons",
+    description="Find Vanguards who earned a specific ribbon"
+)
+@app_commands.choices(ribbon=RIBBON_CHOICES)
+async def lookup_ribbon(
+    interaction: discord.Interaction,
+    ribbon: app_commands.Choice[str]
+):
 
-    if not users:
-        await interaction.response.send_message("Nobody has this ribbon.")
-        return
+    ribbon_name = ribbon.value
 
-    names = "\n".join(set(u[0] for u in users))
-
-    await interaction.response.send_message(
-        f"Users with **{ribbon}**:\n{names}"
+    cursor.execute(
+        "SELECT username FROM awards WHERE ribbon=?",
+        (ribbon_name,)
     )
 
+    users = cursor.fetchall()
 
-@bot.tree.command(name="lookup_distribution", description="Ribbon statistics")
-async def lookup_distribution(interaction: discord.Interaction):
-    data = get_ribbon_stats()
-
-    if not data:
-        await interaction.response.send_message("No awards exist.")
+    if not users:
+        await interaction.response.send_message(
+            "Nobody has this ribbon.",
+            ephemeral=True
+        )
         return
 
-    text = "\n".join(f"{r}: {c}" for r, c in data)
+    names = "\n".join(sorted(set(u[0] for u in users)))
 
     embed = discord.Embed(
-        title="Ribbon Distribution",
-        description=text
+        title="Ribbon Lookup",
+        description=(
+            f"Users with **"
+            f"{ribbon_name}**:\n\n"
+            f"{names}"
+        )
     )
 
     await interaction.response.send_message(embed=embed)
